@@ -110,7 +110,7 @@ export default function Home() {
       }
     }
     
-    ctx.putImageData(new ImageData(edges, width, height), 0, 0);
+    ctx.putImageData(new ImageData(new Uint8ClampedArray(edges), width, height), 0, 0);
   };
 
   // Pixel style
@@ -161,7 +161,7 @@ export default function Home() {
       data[i + 2] = b;
     }
     
-    ctx.putImageData(new ImageData(data, width, height), 0, 0);
+    ctx.putImageData(new ImageData(new Uint8ClampedArray(data), width, height), 0, 0);
   };
 
   // Oil painting style
@@ -191,7 +191,7 @@ export default function Home() {
       }
     }
     
-    ctx.putImageData(new ImageData(data, width, height), 0, 0);
+    ctx.putImageData(new ImageData(new Uint8ClampedArray(data), width, height), 0, 0);
     
     // Add texture
     ctx.globalAlpha = 0.1;
@@ -214,7 +214,7 @@ export default function Home() {
       data[i + 2] = Math.round(data[i + 2] / (256 / levels)) * (256 / levels);
     }
     
-    ctx.putImageData(new ImageData(data, width, height), 0, 0);
+    ctx.putImageData(new ImageData(new Uint8ClampedArray(data), width, height), 0, 0);
     
     // Add edge lines
     ctx.strokeStyle = 'black';
@@ -244,7 +244,7 @@ export default function Home() {
       data[i + 2] = Math.min(255, r * 0.272 + g * 0.534 + b * 0.131);
     }
     
-    ctx.putImageData(new ImageData(data, width, height), 0, 0);
+    ctx.putImageData(new ImageData(new Uint8ClampedArray(data), width, height), 0, 0);
     
     // Add vignette
     const gradient = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, Math.max(width, height)/2);
