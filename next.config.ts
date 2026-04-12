@@ -1,17 +1,28 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Static HTML export
   output: 'export',
+  
+  // Disable image optimization for static export
   images: {
     unoptimized: true,
   },
+  
+  // Add trailing slash for static hosting
   trailingSlash: true,
-  // Disable standalone output for static export
-  outputFileTracing: false,
-  // Skip Cloudflare Pages adapter
+  
+  // Disable server features that don't work with static export
   experimental: {
-    // works with output: 'export'
+    serverActions: false,
+    serverComponentsExternalPackages: [],
   },
+  
+  // Disable static page generation that might cause issues
+  generateStaticParams: undefined,
+  
+  // Ensure no dynamic APIs are used at build time
+  dynamic: 'force-static',
 };
 
 export default nextConfig;
