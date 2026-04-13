@@ -6,12 +6,10 @@ const nextConfig: NextConfig = {
     unoptimized: true,
   },
   trailingSlash: true,
-  experimental: {
-    outputFileTracingIncludes: {
-      '/_next/static/**/*.js',
-      '/api/**/*.js',
-      '/**/*.json',
-    },
+  outputFileTracingIncludes: {
+    '/_next/static/**/*': ['.js'],
+    '/api/**/*': ['.js'],
+    '/**/*.json': ['.json'],
   },
 };
 

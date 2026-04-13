@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:cloudflare": "node scripts/fix-cloudflare-build.mjs && bunx @opennextjs/cloudflare build",
     "start": "next start",
     "lint": "eslint"
   },
