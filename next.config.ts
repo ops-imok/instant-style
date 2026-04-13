@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
     '/_next/static/**/*': ['.js'],
     '/api/**/*': ['.js'],
     '/**/*.json': ['.json'],
+    '/_next/server/**/*': ['*'],
   },
 };
 
