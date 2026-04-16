@@ -1,5 +1,5 @@
 {
-  "packageManager": "yarn@1.22.22",
+  "packageManager": "pnpm@10.9.2",
   "name": "instant-style",
   "version": "0.1.0",
   "private": true,
