@@ -1,5 +1,5 @@
 {
-  "packageManager": "pnpm@10.33.0",
+  "packageManager": "pnpm@9.12.3",
   "name": "instant-style",
   "version": "0.1.0",
   "private": true,
