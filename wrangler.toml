@@ -1,7 +1,11 @@
+"$schema" = "./node_modules/wrangler/config-schema.json"
+
 name = "instant-style"  # 你的项目名称
-route = ""              # 可选：指定一个路由规则
-zone_id = ""            # 可选：指定一个 Zone ID，这是work部署的残留值，现在是pages部署了
-account_id = "a295b6282fcb8e6e3dc96abfbb78a48e"  # 你的 Cloudflare 账户 ID
-pages_build_output_dir = ".vercel/output/static" # 告知 Cloudflare 最终编译的网站文件所在的文件夹
+main = ".open-next/worker.js"
 compatibility_date = "2026-04-23"  # Cloudflare Workers/Pages 运行时的版本日期
 compatibility_flags = ["nodejs_compat"] #稳定静态资源中包含了一些复杂的后端逻辑（或者是为了兼容一些 Node.js API）
+account_id = "a295b6282fcb8e6e3dc96abfbb78a48e"  # 你的 Cloudflare 账户 ID
+
+[assets]
+directory = ".open-next/assets"
+binding = "ASSETS"
