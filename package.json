@@ -1,5 +1,5 @@
 {
-  "packageManager": " ",
+  "packageManager": "npm@10",
   "name": "instant-style",
   "version": "0.1.0",
   "private": true,
