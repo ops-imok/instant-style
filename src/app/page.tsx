@@ -1,418 +1,560 @@
 'use client';
 
-import { useState, useRef } from 'react';
-import Image from 'next/image';
+import { useState } from 'react';
 
-// Style definitions
-const styles = [
-  { id: 'sketch', name: '简笔画', icon: '✏️', desc: '照片变线条画' },
-  { id: 'pixel', name: '像素风', icon: '👾', desc: '照片变像素画' },
-  { id: 'pop', name: '波普艺术', icon: '🎨', desc: '高对比色块' },
-  { id: 'oil', name: '油画', icon: '🖼️', desc: '油画质感' },
-  { id: 'comic', name: '漫画', icon: '💬', desc: '卡通效果' },
-  { id: 'vintage', name: '复古', icon: '📷', desc: '复古滤镜' },
-];
+type Language = 'en' | 'zh';
+
+const copy = {
+  en: {
+    nav: {
+      works: 'Works',
+      library: 'Library',
+      tools: 'Tools',
+      support: 'Support',
+      languageButton: '中文',
+    },
+    hero: {
+      eyebrow: 'Personal visual AI project space',
+      title: 'ImgDrift',
+      subtitle:
+        'A personal visual AI project space for image generation, generation logic, and future image tools.',
+      description:
+        'I use this site to collect image experiments, organize visual materials, and document how ideas move from prompts to finished visuals.',
+      primaryCta: 'Explore Works',
+      secondaryCta: 'View Future Tools',
+      tags: ['Image Generation', 'Generation Logic', 'Visual Library', 'AI Tools Coming Soon'],
+    },
+    index: {
+      title: 'Project Index',
+      description: 'A simple map of what ImgDrift is collecting, showing, and planning next.',
+      cards: [
+        {
+          title: 'Works',
+          body: 'Image-related tasks, generated visuals, and project process notes.',
+          href: '#works',
+        },
+        {
+          title: 'Visual Library',
+          body: 'A reserved space for collected references, generated images, and visual materials.',
+          href: '#library',
+        },
+        {
+          title: 'Future Tools',
+          body: 'Planned AI image tools including upscale, background remover, and text-to-image.',
+          href: '#tools',
+        },
+      ],
+    },
+    platforms: {
+      title: 'Platforms',
+      description: 'Current and future places where I share projects, notes, and visual experiments.',
+      items: [
+        { title: 'GitHub', status: 'Available', href: 'https://github.com/ops-imok' },
+        { title: 'Xiaohongshu', status: 'Coming Soon' },
+        { title: 'Bilibili', status: 'Coming Soon' },
+      ],
+    },
+    works: {
+      kicker: '# works',
+      title: 'Works Preview',
+      description:
+        'A reserved space for image generation results, visual content ideas, and generation logic demos.',
+      items: [
+        {
+          title: 'Product & Poster Visuals',
+          body: 'Product images, posters, covers, and visual assets built around concrete use cases.',
+          status: 'Placeholder',
+        },
+        {
+          title: 'Visual Content Creation',
+          body: 'Infographics, social covers, content cards, and image-based storytelling formats.',
+          status: 'Draft',
+        },
+        {
+          title: 'Generation Logic Demos',
+          body: 'How rough ideas move into prompt structures, visual constraints, iterations, and final outputs.',
+          status: 'Placeholder',
+        },
+        {
+          title: 'Visual Experiments',
+          body: 'Style, composition, texture, and visual direction experiments beyond commercial use cases.',
+          status: 'Coming Soon',
+        },
+      ],
+    },
+    library: {
+      kicker: '# library',
+      title: 'Visual Library',
+      description:
+        'A reserved library for references, generated images, product materials, and style experiments.',
+      items: [
+        {
+          title: 'Reference Images',
+          body: 'Collected visual references for future prompt and design experiments.',
+          status: '0 items / Placeholder',
+        },
+        {
+          title: 'Generated Images',
+          body: 'AI-generated outputs that can be organized by direction and use case.',
+          status: '0 items / Placeholder',
+        },
+        {
+          title: 'Product Materials',
+          body: 'Product-related images, visual elements, and layout materials.',
+          status: '0 items / Placeholder',
+        },
+        {
+          title: 'Style Experiments',
+          body: 'Explorations of visual styles, composition, and image generation constraints.',
+          status: '0 items / Placeholder',
+        },
+      ],
+    },
+    tools: {
+      kicker: '# tools',
+      title: 'Future Image Tools',
+      description:
+        'Planned lightweight AI image tools. These features are not enabled in v0.0.1, but API slots are reserved for future integration.',
+      items: [
+        {
+          title: 'Image Upscale',
+          body: 'Improve image resolution and clarity through a future API integration.',
+          status: ['Coming Soon', 'API Slot Reserved'],
+        },
+        {
+          title: 'Background Remover',
+          body: 'Remove image backgrounds for product visuals and content assets.',
+          status: ['Coming Soon', 'API Slot Reserved'],
+        },
+        {
+          title: 'Text to Image',
+          body: 'Generate images from selected prompt templates and constrained visual directions, not a blank prompt box.',
+          status: ['Coming Soon', 'Prompt Templates Planned'],
+        },
+      ],
+      sketch: {
+        title: 'Sketch Prototype',
+        body: 'A browser-based sketch effect from the original prototype. It is kept as a lightweight experiment, not the core product.',
+        status: ['Prototype', 'Not enabled in v0.0.1'],
+      },
+    },
+    support: {
+      kicker: '# support',
+      title: 'Support ImgDrift',
+      description: 'If you like this visual AI project, you can support future experiments.',
+      placeholder: 'Donation QR Placeholder',
+    },
+    footer: {
+      text: 'ImgDrift — A personal visual AI project space.',
+      version: 'Version v0.0.1 · GitHub',
+    },
+  },
+  zh: {
+    nav: {
+      works: '作品',
+      library: '素材库',
+      tools: '工具',
+      support: '支持',
+      languageButton: 'EN',
+    },
+    hero: {
+      eyebrow: '个人视觉 AI 项目空间',
+      title: 'ImgDrift',
+      subtitle: '一个围绕 AI 图像生成、生成逻辑和未来图片工具搭建的个人视觉项目空间。',
+      description: '我会在这里整理图像实验、视觉素材，以及从想法到最终成图的完整过程。',
+      primaryCta: '查看作品',
+      secondaryCta: '查看未来工具',
+      tags: ['图像生成', '生成逻辑', '视觉素材库', 'AI 工具规划中'],
+    },
+    index: {
+      title: '项目索引',
+      description: '快速了解 ImgDrift 正在收集、展示和规划的内容。',
+      cards: [
+        {
+          title: '作品与项目',
+          body: '图像相关任务、生成结果和项目流程记录。',
+          href: '#works',
+        },
+        {
+          title: '视觉素材库',
+          body: '用于沉淀参考图、生成图和视觉素材的预留空间。',
+          href: '#library',
+        },
+        {
+          title: '未来工具',
+          body: '规划中的 AI 图片工具，包括高清化、背景移除和文生图。',
+          href: '#tools',
+        },
+      ],
+    },
+    platforms: {
+      title: '平台链接',
+      description: '当前和未来用于发布项目、笔记与图像实验的平台入口。',
+      items: [
+        { title: 'GitHub', status: '已开放', href: 'https://github.com/ops-imok' },
+        { title: '小红书', status: '即将补充' },
+        { title: 'B站', status: '即将补充' },
+      ],
+    },
+    works: {
+      kicker: '# works',
+      title: '作品预览',
+      description: '用于展示图片生成结果、图文内容创作和生成逻辑 Demo 的预留空间。',
+      items: [
+        {
+          title: '产品与海报视觉',
+          body: '围绕具体使用场景生成的产品图、海报、封面和视觉素材。',
+          status: '占位',
+        },
+        {
+          title: '图文内容创作',
+          body: '信息图、社媒封面、内容卡片和图像化表达形式。',
+          status: '草稿',
+        },
+        {
+          title: '生成逻辑 Demo',
+          body: '展示粗略想法如何进入提示词结构、视觉约束、迭代和最终成图。',
+          status: '占位',
+        },
+        {
+          title: '视觉实验',
+          body: '商业用途之外的风格、构图、材质和视觉方向实验。',
+          status: '规划中',
+        },
+      ],
+    },
+    library: {
+      kicker: '# library',
+      title: '视觉素材库',
+      description: '用于沉淀参考图、生成图、产品素材和风格实验的预留素材库。',
+      items: [
+        {
+          title: '参考图片',
+          body: '用于后续提示词和设计实验的视觉参考。',
+          status: '0 项 / 占位',
+        },
+        {
+          title: '生成图片',
+          body: '按方向和使用场景整理的 AI 生成结果。',
+          status: '0 项 / 占位',
+        },
+        {
+          title: '产品素材',
+          body: '产品相关图片、视觉元素和版式素材。',
+          status: '0 项 / 占位',
+        },
+        {
+          title: '风格实验',
+          body: '围绕视觉风格、构图和图片生成约束的实验。',
+          status: '0 项 / 占位',
+        },
+      ],
+    },
+    tools: {
+      kicker: '# tools',
+      title: '未来图片工具',
+      description: '规划中的轻量 AI 图片工具。v0.0.1 暂不开放实际功能，但会为后续 API 接入预留位置。',
+      items: [
+        {
+          title: '图片高清化',
+          body: '未来通过 API 接入提升图片清晰度与分辨率。',
+          status: ['规划中', 'API 接口预留'],
+        },
+        {
+          title: '图片背景移除',
+          body: '用于产品图和内容素材的背景移除能力。',
+          status: ['规划中', 'API 接口预留'],
+        },
+        {
+          title: '文生图',
+          body: '基于预设提示词结构和选定视觉方向生成图片，而不是完全开放的空白输入框。',
+          status: ['规划中', '提示词模板预留'],
+        },
+      ],
+      sketch: {
+        title: '简笔画原型',
+        body: '来自原型项目的浏览器本地简笔画效果。它会作为轻量实验保留，但不是当前核心产品。',
+        status: ['原型', 'v0.0.1 暂不开放'],
+      },
+    },
+    support: {
+      kicker: '# support',
+      title: '支持 ImgDrift',
+      description: '如果你喜欢这个视觉 AI 项目，可以支持它后续继续实验。',
+      placeholder: '打赏二维码占位',
+    },
+    footer: {
+      text: 'ImgDrift — 个人视觉 AI 项目空间。',
+      version: '版本 v0.0.1 · GitHub',
+    },
+  },
+} as const;
+
+function StatusPill({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-600">
+      {children}
+    </span>
+  );
+}
+
+function VisualPlaceholder({ variant = 0 }: { variant?: number }) {
+  const gradients = [
+    'from-indigo-100 via-slate-100 to-cyan-100',
+    'from-amber-100 via-stone-100 to-rose-100',
+    'from-emerald-100 via-slate-100 to-blue-100',
+    'from-violet-100 via-slate-100 to-fuchsia-100',
+  ];
+
+  return (
+    <div className={`relative h-40 overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br ${gradients[variant % gradients.length]}`}>
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,.5)_1px,transparent_1px),linear-gradient(0deg,rgba(255,255,255,.5)_1px,transparent_1px)] bg-[size:24px_24px]" />
+      <div className="absolute left-5 top-5 h-16 w-16 rounded-full bg-white/60 blur-sm" />
+      <div className="absolute bottom-5 right-5 h-20 w-28 rounded-2xl bg-white/55 shadow-sm" />
+      <div className="absolute bottom-8 left-7 h-2 w-24 rounded-full bg-slate-400/30" />
+      <div className="absolute bottom-12 left-7 h-2 w-14 rounded-full bg-slate-400/20" />
+    </div>
+  );
+}
 
 export default function Home() {
-  const [image, setImage] = useState<string | null>(null);
-  const [result, setResult] = useState<string | null>(null);
-  const [selectedStyle, setSelectedStyle] = useState<string | null>(null);
-  const [processing, setProcessing] = useState(false);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [language, setLanguage] = useState<Language>('en');
+  const t = copy[language];
 
-  // Handle image upload
-  const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setImage(event.target?.result as string);
-        setResult(null);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  // Apply style transformation
-  const applyStyle = async () => {
-    if (!image || !selectedStyle || !canvasRef.current) return;
-
-    setProcessing(true);
-
-    const img = new window.Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      const canvas = canvasRef.current!;
-      const ctx = canvas.getContext('2d')!;
-      
-      // Set canvas size
-      const maxSize = 800;
-      const scale = Math.min(maxSize / img.width, maxSize / img.height, 1);
-      canvas.width = img.width * scale;
-      canvas.height = img.height * scale;
-      
-      // Draw original image
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      
-      // Get image data
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const data = imageData.data;
-      
-      // Apply style
-      switch (selectedStyle) {
-        case 'sketch':
-          applySketch(data, canvas.width, canvas.height, ctx);
-          break;
-        case 'pixel':
-          applyPixel(data, canvas.width, canvas.height, ctx);
-          break;
-        case 'pop':
-          applyPop(data, canvas.width, canvas.height, ctx);
-          break;
-        case 'oil':
-          applyOil(data, canvas.width, canvas.height, ctx);
-          break;
-        case 'comic':
-          applyComic(data, canvas.width, canvas.height, ctx);
-          break;
-        case 'vintage':
-          applyVintage(data, canvas.width, canvas.height, ctx);
-          break;
-      }
-      
-      // Set result
-      setResult(canvas.toDataURL('image/png'));
-      setProcessing(false);
-    };
-    img.src = image;
-  };
-
-  // Sketch style
-  const applySketch = (data: Uint8ClampedArray, width: number, height: number, ctx: CanvasRenderingContext2D) => {
-    // Convert to grayscale and detect edges
-    const gray = new Float32Array(width * height);
-    for (let i = 0; i < data.length; i += 4) {
-      gray[i / 4] = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
-    }
-    
-    // Sobel edge detection
-    const edges = new Uint8ClampedArray(data.length);
-    for (let y = 1; y < height - 1; y++) {
-      for (let x = 1; x < width - 1; x++) {
-        const idx = y * width + x;
-        const gx = gray[idx - 1] - gray[idx + 1];
-        const gy = gray[idx - width] - gray[idx + width];
-        const edge = Math.min(255, Math.sqrt(gx * gx + gy * gy));
-        const i = idx * 4;
-        edges[i] = edges[i + 1] = edges[i + 2] = 255 - edge;
-        edges[i + 3] = 255;
-      }
-    }
-    
-    ctx.putImageData(new ImageData(new Uint8ClampedArray(edges), width, height), 0, 0);
-  };
-
-  // Pixel style
-  const applyPixel = (data: Uint8ClampedArray, width: number, height: number, ctx: CanvasRenderingContext2D) => {
-    const pixelSize = 8;
-    
-    for (let y = 0; y < height; y += pixelSize) {
-      for (let x = 0; x < width; x += pixelSize) {
-        let r = 0, g = 0, b = 0, count = 0;
-        
-        // Average color in block
-        for (let dy = 0; dy < pixelSize && y + dy < height; dy++) {
-          for (let dx = 0; dx < pixelSize && x + dx < width; dx++) {
-            const i = ((y + dy) * width + (x + dx)) * 4;
-            r += data[i];
-            g += data[i + 1];
-            b += data[i + 2];
-            count++;
-          }
-        }
-        
-        r = Math.round(r / count);
-        g = Math.round(g / count);
-        b = Math.round(b / count);
-        
-        // Fill block
-        ctx.fillStyle = `rgb(${r},${g},${b})`;
-        ctx.fillRect(x, y, pixelSize, pixelSize);
-      }
-    }
-  };
-
-  // Pop art style
-  const applyPop = (data: Uint8ClampedArray, width: number, height: number, ctx: CanvasRenderingContext2D) => {
-    const colors = [
-      [255, 0, 100],
-      [0, 200, 255],
-      [255, 200, 0],
-      [100, 0, 255],
-    ];
-    
-    for (let i = 0; i < data.length; i += 4) {
-      const gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
-      const colorIdx = Math.min(3, Math.floor(gray / 64));
-      const [r, g, b] = colors[colorIdx];
-      data[i] = r;
-      data[i + 1] = g;
-      data[i + 2] = b;
-    }
-    
-    ctx.putImageData(new ImageData(new Uint8ClampedArray(data), width, height), 0, 0);
-  };
-
-  // Oil painting style
-  const applyOil = (data: Uint8ClampedArray, width: number, height: number, ctx: CanvasRenderingContext2D) => {
-    // Simplified oil painting effect
-    const radius = 3;
-    const intensity = 20;
-    
-    for (let y = radius; y < height - radius; y++) {
-      for (let x = radius; x < width - radius; x++) {
-        let r = 0, g = 0, b = 0, count = 0;
-        
-        for (let dy = -radius; dy <= radius; dy++) {
-          for (let dx = -radius; dx <= radius; dx++) {
-            const i = ((y + dy) * width + (x + dx)) * 4;
-            r += data[i];
-            g += data[i + 1];
-            b += data[i + 2];
-            count++;
-          }
-        }
-        
-        const i = (y * width + x) * 4;
-        data[i] = Math.round(r / count);
-        data[i + 1] = Math.round(g / count);
-        data[i + 2] = Math.round(b / count);
-      }
-    }
-    
-    ctx.putImageData(new ImageData(new Uint8ClampedArray(data), width, height), 0, 0);
-    
-    // Add texture
-    ctx.globalAlpha = 0.1;
-    ctx.globalCompositeOperation = 'overlay';
-    for (let i = 0; i < 1000; i++) {
-      ctx.fillStyle = Math.random() > 0.5 ? 'white' : 'black';
-      ctx.fillRect(Math.random() * width, Math.random() * height, 2, 2);
-    }
-    ctx.globalAlpha = 1;
-    ctx.globalCompositeOperation = 'source-over';
-  };
-
-  // Comic style
-  const applyComic = (data: Uint8ClampedArray, width: number, height: number, ctx: CanvasRenderingContext2D) => {
-    // Reduce colors
-    const levels = 4;
-    for (let i = 0; i < data.length; i += 4) {
-      data[i] = Math.round(data[i] / (256 / levels)) * (256 / levels);
-      data[i + 1] = Math.round(data[i + 1] / (256 / levels)) * (256 / levels);
-      data[i + 2] = Math.round(data[i + 2] / (256 / levels)) * (256 / levels);
-    }
-    
-    ctx.putImageData(new ImageData(new Uint8ClampedArray(data), width, height), 0, 0);
-    
-    // Add edge lines
-    ctx.strokeStyle = 'black';
-    ctx.lineWidth = 1;
-    ctx.globalAlpha = 0.5;
-    
-    // Simple edge detection overlay
-    const tempCanvas = document.createElement('canvas');
-    tempCanvas.width = width;
-    tempCanvas.height = height;
-    const tempCtx = tempCanvas.getContext('2d')!;
-    tempCtx.drawImage(ctx.canvas, 0, 0);
-    
-    ctx.globalAlpha = 1;
-  };
-
-  // Vintage style
-  const applyVintage = (data: Uint8ClampedArray, width: number, height: number, ctx: CanvasRenderingContext2D) => {
-    for (let i = 0; i < data.length; i += 4) {
-      const r = data[i];
-      const g = data[i + 1];
-      const b = data[i + 2];
-      
-      // Sepia tone
-      data[i] = Math.min(255, r * 0.393 + g * 0.769 + b * 0.189);
-      data[i + 1] = Math.min(255, r * 0.349 + g * 0.686 + b * 0.168);
-      data[i + 2] = Math.min(255, r * 0.272 + g * 0.534 + b * 0.131);
-    }
-    
-    ctx.putImageData(new ImageData(new Uint8ClampedArray(data), width, height), 0, 0);
-    
-    // Add vignette
-    const gradient = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, Math.max(width, height)/2);
-    gradient.addColorStop(0.5, 'rgba(0,0,0,0)');
-    gradient.addColorStop(1, 'rgba(0,0,0,0.5)');
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, width, height);
-  };
-
-  // Download result
-  const downloadResult = () => {
-    if (!result) return;
-    const link = document.createElement('a');
-    link.download = 'instant-style-result.png';
-    link.href = result;
-    link.click();
-  };
-
-  // Reset
-  const reset = () => {
-    setImage(null);
-    setResult(null);
-    setSelectedStyle(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
+  const toggleLanguage = () => {
+    setLanguage((current) => (current === 'en' ? 'zh' : 'en'));
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-purple-600 to-blue-500 p-4 md:p-8">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <header className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
-            🎨 Instant Style
-          </h1>
-          <p className="text-white/80 text-lg">
-            免费在线风格转换工具 - 纯浏览器处理，图片不上传服务器
-          </p>
-        </header>
-
-        {/* Upload Section */}
-        <div className="bg-white rounded-2xl shadow-2xl p-6 mb-6">
-          <div 
-            className="border-3 border-dashed border-gray-300 rounded-xl p-8 text-center cursor-pointer hover:border-purple-400 transition-colors"
-            onClick={() => fileInputRef.current?.click()}
-          >
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleUpload}
-              className="hidden"
-            />
-            {image ? (
-              <div className="relative w-full max-w-md mx-auto">
-                <Image
-                  src={image}
-                  alt="Uploaded"
-                  width={400}
-                  height={400}
-                  className="rounded-lg max-h-80 object-contain mx-auto"
-                />
-              </div>
-            ) : (
-              <div className="text-gray-500">
-                <div className="text-5xl mb-4">📷</div>
-                <p className="text-lg font-medium">点击或拖拽上传图片</p>
-                <p className="text-sm">支持 JPG, PNG, WebP</p>
-              </div>
-            )}
-          </div>
+    <main className="min-h-screen bg-[#f7f7f5] text-slate-950">
+      <header className="sticky top-0 z-30 border-b border-slate-200/70 bg-[#f7f7f5]/90 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 md:px-8">
+          <a href="#top" className="text-sm font-semibold tracking-tight text-slate-950 hover:underline underline-offset-4">
+            ImgDrift
+          </a>
+          <nav className="flex items-center gap-3 text-sm text-slate-600 md:gap-5">
+            <a href="#works" className="hidden hover:text-slate-950 hover:underline underline-offset-4 sm:inline">
+              {t.nav.works}
+            </a>
+            <a href="#library" className="hidden hover:text-slate-950 hover:underline underline-offset-4 sm:inline">
+              {t.nav.library}
+            </a>
+            <a href="#tools" className="hover:text-slate-950 hover:underline underline-offset-4">
+              {t.nav.tools}
+            </a>
+            <a href="#support" className="hover:text-slate-950 hover:underline underline-offset-4">
+              {t.nav.support}
+            </a>
+            <button
+              type="button"
+              onClick={toggleLanguage}
+              className="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 shadow-sm transition hover:border-slate-500 hover:text-slate-950"
+            >
+              {t.nav.languageButton}
+            </button>
+          </nav>
         </div>
+      </header>
 
-        {/* Style Selection */}
-        {image && (
-          <div className="bg-white rounded-2xl shadow-2xl p-6 mb-6">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">选择风格</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-              {styles.map((style) => (
-                <button
-                  key={style.id}
-                  onClick={() => setSelectedStyle(style.id)}
-                  className={`p-4 rounded-xl border-2 transition-all ${
-                    selectedStyle === style.id
-                      ? 'border-purple-500 bg-purple-50 shadow-lg'
-                      : 'border-gray-200 hover:border-purple-300 hover:shadow'
-                  }`}
-                >
-                  <div className="text-3xl mb-2">{style.icon}</div>
-                  <div className="font-medium text-gray-800">{style.name}</div>
-                  <div className="text-xs text-gray-500">{style.desc}</div>
-                </button>
+      <section id="top" className="mx-auto max-w-6xl px-5 pb-16 pt-16 md:px-8 md:pb-24 md:pt-24">
+        <div className="grid gap-10 lg:grid-cols-[1.1fr_.9fr] lg:items-center">
+          <div>
+            <p className="mb-4 inline-flex rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-slate-500">
+              {t.hero.eyebrow}
+            </p>
+            <h1 className="text-5xl font-semibold tracking-tight text-slate-950 md:text-7xl">{t.hero.title}</h1>
+            <p className="mt-6 max-w-2xl text-2xl font-medium leading-tight text-slate-800 md:text-3xl">{t.hero.subtitle}</p>
+            <p className="mt-5 max-w-2xl text-base leading-8 text-slate-600 md:text-lg">{t.hero.description}</p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a
+                href="#works"
+                className="rounded-full bg-slate-950 px-5 py-3 text-sm font-medium text-white transition hover:-translate-y-0.5 hover:bg-slate-800"
+              >
+                {t.hero.primaryCta}
+              </a>
+              <a
+                href="#tools"
+                className="rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-medium text-slate-800 transition hover:-translate-y-0.5 hover:border-slate-500"
+              >
+                {t.hero.secondaryCta}
+              </a>
+            </div>
+            <div className="mt-8 flex flex-wrap gap-2">
+              {t.hero.tags.map((tag) => (
+                <StatusPill key={tag}>{tag}</StatusPill>
               ))}
             </div>
           </div>
-        )}
 
-        {/* Action Button */}
-        {image && selectedStyle && (
-          <div className="text-center mb-6">
-            <button
-              onClick={applyStyle}
-              disabled={processing}
-              className={`px-8 py-4 rounded-full text-lg font-bold text-white transition-all ${
-                processing
-                  ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-pink-500 to-purple-600 hover:shadow-lg hover:scale-105'
-              }`}
+          <div className="rounded-[2rem] border border-slate-200 bg-white p-4 shadow-sm">
+            <div className="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4">
+              <VisualPlaceholder variant={0} />
+              <div className="mt-4 grid grid-cols-3 gap-3">
+                <div className="h-20 rounded-2xl border border-slate-200 bg-white" />
+                <div className="h-20 rounded-2xl border border-slate-200 bg-white" />
+                <div className="h-20 rounded-2xl border border-slate-200 bg-white" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-5 py-8 md:px-8">
+        <div className="mb-5 flex flex-col justify-between gap-3 md:flex-row md:items-end">
+          <div>
+            <h2 className="text-2xl font-semibold tracking-tight text-slate-950">{t.index.title}</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">{t.index.description}</p>
+          </div>
+        </div>
+        <div className="grid gap-4 md:grid-cols-3">
+          {t.index.cards.map((card) => (
+            <a
+              key={card.title}
+              href={card.href}
+              className="group rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-slate-400 hover:shadow-md"
             >
-              {processing ? '⏳ 处理中...' : '✨ 生成结果'}
-            </button>
+              <h3 className="text-lg font-semibold text-slate-950 group-hover:underline underline-offset-4">{card.title} →</h3>
+              <p className="mt-3 text-sm leading-6 text-slate-600">{card.body}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-5 py-8 md:px-8">
+        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+          <div className="mb-5">
+            <h2 className="text-2xl font-semibold tracking-tight text-slate-950">{t.platforms.title}</h2>
+            <p className="mt-2 text-sm leading-6 text-slate-600">{t.platforms.description}</p>
           </div>
-        )}
+          <div className="grid gap-3 md:grid-cols-3">
+            {t.platforms.items.map((item) => {
+              const content = (
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-slate-400">
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="font-medium text-slate-900">{item.title}</span>
+                    <StatusPill>{item.status}</StatusPill>
+                  </div>
+                </div>
+              );
 
-        {/* Result */}
-        {result && (
-          <div className="bg-white rounded-2xl shadow-2xl p-6">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">处理结果</h2>
-            <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
-              <div className="text-center">
-                <p className="text-sm text-gray-500 mb-2">原图</p>
-                <Image
-                  src={image!}
-                  alt="Original"
-                  width={300}
-                  height={300}
-                  className="rounded-lg max-h-64 object-contain"
-                />
+              return item.href ? (
+                <a key={item.title} href={item.href} target="_blank" rel="noreferrer" className="group">
+                  {content}
+                </a>
+              ) : (
+                <div key={item.title}>{content}</div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section id="works" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-12 md:px-8">
+        <SectionHeading kicker={t.works.kicker} title={t.works.title} description={t.works.description} />
+        <div className="mt-8 grid gap-5 md:grid-cols-2">
+          {t.works.items.map((item, index) => (
+            <article
+              key={item.title}
+              className="group rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-slate-400 hover:shadow-md"
+            >
+              <VisualPlaceholder variant={index} />
+              <div className="mt-5 flex items-start justify-between gap-4">
+                <h3 className="text-lg font-semibold text-slate-950 group-hover:underline underline-offset-4">{item.title} →</h3>
+                <StatusPill>{item.status}</StatusPill>
               </div>
-              <div className="text-4xl text-gray-300">→</div>
-              <div className="text-center">
-                <p className="text-sm text-gray-500 mb-2">结果</p>
-                <Image
-                  src={result}
-                  alt="Result"
-                  width={300}
-                  height={300}
-                  className="rounded-lg max-h-64 object-contain"
-                />
+              <p className="mt-3 text-sm leading-6 text-slate-600">{item.body}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section id="library" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-12 md:px-8">
+        <SectionHeading kicker={t.library.kicker} title={t.library.title} description={t.library.description} />
+        <div className="mt-8 grid gap-4 md:grid-cols-4">
+          {t.library.items.map((item, index) => (
+            <article
+              key={item.title}
+              className="group rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-slate-400"
+            >
+              <div className="mb-5 grid grid-cols-3 gap-2">
+                <div className="h-12 rounded-xl bg-slate-100" />
+                <div className="h-12 rounded-xl bg-slate-200/80" />
+                <div className="h-12 rounded-xl bg-slate-100" />
+                <div className="h-12 rounded-xl bg-slate-200/70" />
+                <div className="h-12 rounded-xl bg-slate-100" />
+                <div className="h-12 rounded-xl bg-slate-200/80" />
               </div>
+              <h3 className="font-semibold text-slate-950 group-hover:underline underline-offset-4">{item.title} #{index + 1}</h3>
+              <p className="mt-3 text-sm leading-6 text-slate-600">{item.body}</p>
+              <div className="mt-4">
+                <StatusPill>{item.status}</StatusPill>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section id="tools" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-12 md:px-8">
+        <SectionHeading kicker={t.tools.kicker} title={t.tools.title} description={t.tools.description} />
+        <div className="mt-8 grid gap-5 md:grid-cols-3">
+          {t.tools.items.map((item) => (
+            <article
+              key={item.title}
+              className="group rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-slate-400 hover:shadow-md"
+            >
+              <div className="mb-5 h-12 w-12 rounded-2xl border border-slate-200 bg-slate-50" />
+              <h3 className="text-lg font-semibold text-slate-950 group-hover:underline underline-offset-4">{item.title} →</h3>
+              <p className="mt-3 text-sm leading-6 text-slate-600">{item.body}</p>
+              <div className="mt-5 flex flex-wrap gap-2">
+                {item.status.map((status) => (
+                  <StatusPill key={status}>{status}</StatusPill>
+                ))}
+              </div>
+            </article>
+          ))}
+        </div>
+        <div className="mt-5 rounded-3xl border border-dashed border-slate-300 bg-white/70 p-6">
+          <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+            <div>
+              <h3 className="text-lg font-semibold text-slate-950">{t.tools.sketch.title}</h3>
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">{t.tools.sketch.body}</p>
             </div>
-            <div className="flex gap-3 justify-center mt-6">
-              <button
-                onClick={downloadResult}
-                className="px-6 py-3 rounded-full bg-green-500 text-white font-medium hover:bg-green-600 transition-colors"
-              >
-                💾 下载图片
-              </button>
-              <button
-                onClick={reset}
-                className="px-6 py-3 rounded-full bg-gray-200 text-gray-700 font-medium hover:bg-gray-300 transition-colors"
-              >
-                🔄 重新开始
-              </button>
+            <div className="flex flex-wrap gap-2">
+              {t.tools.sketch.status.map((status) => (
+                <StatusPill key={status}>{status}</StatusPill>
+              ))}
             </div>
           </div>
-        )}
+        </div>
+      </section>
 
-        {/* Hidden Canvas */}
-        <canvas ref={canvasRef} className="hidden" />
+      <section id="support" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-12 md:px-8">
+        <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+          <SectionHeading kicker={t.support.kicker} title={t.support.title} description={t.support.description} />
+          <div className="mt-8 flex min-h-40 items-center justify-center rounded-3xl border border-dashed border-slate-300 bg-slate-50 text-sm font-medium text-slate-500">
+            {t.support.placeholder}
+          </div>
+        </div>
+      </section>
 
-        {/* Footer */}
-        <footer className="text-center mt-8 text-white/60 text-sm">
-          <p>🔒 您的图片在浏览器本地处理，不会上传到服务器</p>
-          <p className="mt-1">Powered by Canvas API • 完全免费</p>
-        </footer>
-      </div>
+      <footer className="mx-auto max-w-6xl px-5 py-10 md:px-8">
+        <div className="flex flex-col justify-between gap-3 border-t border-slate-200 pt-6 text-sm text-slate-500 md:flex-row md:items-center">
+          <p>{t.footer.text}</p>
+          <a href="https://github.com/ops-imok" target="_blank" rel="noreferrer" className="hover:text-slate-950 hover:underline underline-offset-4">
+            {t.footer.version}
+          </a>
+        </div>
+      </footer>
     </main>
+  );
+}
+
+function SectionHeading({ kicker, title, description }: { kicker: string; title: string; description: string }) {
+  return (
+    <div>
+      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">{kicker}</p>
+      <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 md:text-4xl">{title}</h2>
+      <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600 md:text-base">{description}</p>
+    </div>
   );
 }
