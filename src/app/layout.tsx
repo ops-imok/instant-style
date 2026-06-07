@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Instant Style - 免费在线风格转换工具",
-  description: "免费在线风格转换工具，支持简笔画、像素风、波普艺术、油画、漫画、复古等风格，纯浏览器处理，图片不上传服务器",
+  title: "ImgDrift - Personal Visual AI Project Space",
+  description:
+    "ImgDrift is a personal visual AI project space for image generation, generation logic, visual materials, and future AI image tools.",
 };
 
 export default function RootLayout({
@@ -12,7 +13,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN">
+    <html lang="en">
       <body className="antialiased">
         {children}
       </body>
