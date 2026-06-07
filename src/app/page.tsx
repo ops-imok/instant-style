@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 
 type Language = 'en' | 'zh';
-type PlatformItem = { title: string; status: string; href?: string };
+type PlatformItem = { title: string; status: string; href: string };
 
 const copy = {
   en: {
@@ -31,8 +31,8 @@ const copy = {
       description: 'Current and future places where I share projects, notes, and visual experiments.',
       items: [
         { title: 'GitHub', status: 'Available', href: 'https://github.com/ops-imok' },
-        { title: 'Xiaohongshu', status: 'Coming Soon' },
-        { title: 'Bilibili', status: 'Coming Soon' },
+        { title: 'Xiaohongshu', status: 'Coming Soon', href: '' },
+        { title: 'Bilibili', status: 'Coming Soon', href: '' },
       ],
     },
     works: {
@@ -100,8 +100,8 @@ const copy = {
       description: '当前和未来用于发布项目、笔记与图像实验的平台入口。',
       items: [
         { title: 'GitHub', status: '已开放', href: 'https://github.com/ops-imok' },
-        { title: '小红书', status: '即将补充' },
-        { title: 'B站', status: '即将补充' },
+        { title: '小红书', status: '即将补充', href: '' },
+        { title: 'B站', status: '即将补充', href: '' },
       ],
     },
     works: {
@@ -146,7 +146,7 @@ const copy = {
   },
 } as const;
 
-function StatusPill({ children }: { children: React.ReactNode }) {
+function StatusPill({ children }: { children: ReactNode }) {
   return <span className="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-600">{children}</span>;
 }
 
