@@ -6,6 +6,9 @@ compatibility_date = "2026-04-23"  # Cloudflare Workers/Pages 运行时的版本
 compatibility_flags = ["nodejs_compat"] #稳定静态资源中包含了一些复杂的后端逻辑（或者是为了兼容一些 Node.js API）
 account_id = "a295b6282fcb8e6e3dc96abfbb78a48e"  # 你的 Cloudflare 账户 ID
 
+[build]
+command = "npx opennextjs-cloudflare build"
+
 [assets]
 directory = ".open-next/assets"
 binding = "ASSETS"
