@@ -73,4 +73,4 @@ Planned future directions:
 
 ---
 
-ImgDrift — A personal visual AI project space.
+ImgDrift — A personal visual AI project space. 
