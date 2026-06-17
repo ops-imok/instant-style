@@ -56,8 +56,8 @@ const copy = {
     },
     social: [
       { key: 'github', href: 'https://github.com/ops-imok', label: 'GitHub', hint: 'Code and repositories', external: true },
-      { key: 'twitter', href: '#', label: 'Twitter', hint: 'Social link placeholder', external: false },
-      { key: 'xiaohongshu', href: '#', label: 'Xiaohongshu', hint: 'Social link placeholder', external: false },
+      { key: 'twitter', href: 'https://x.com/ianmokoffi16908', label: 'Twitter', hint: 'Social updates', external: true },
+      { key: 'xiaohongshu', href: 'https://www.xiaohongshu.com/user/profile/69633ab2000000003900cdc1?tab=note&subTab=note', label: 'Xiaohongshu', hint: 'Notes and posts', external: true },
     ] as readonly NavItem[],
   },
   zh: {
@@ -102,8 +102,8 @@ const copy = {
     },
     social: [
       { key: 'github', href: 'https://github.com/ops-imok', label: 'GitHub', hint: '代码与仓库', external: true },
-      { key: 'twitter', href: '#', label: 'Twitter', hint: '社交链接占位', external: false },
-      { key: 'xiaohongshu', href: '#', label: '小红书', hint: '社交链接占位', external: false },
+      { key: 'twitter', href: 'https://x.com/ianmokoffi16908', label: 'Twitter', hint: '社交动态', external: true },
+      { key: 'xiaohongshu', href: 'https://www.xiaohongshu.com/user/profile/69633ab2000000003900cdc1?tab=note&subTab=note', label: '小红书', hint: '笔记与内容', external: true },
     ] as readonly NavItem[],
   },
 } as const;
