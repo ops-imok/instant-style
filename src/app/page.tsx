@@ -3,178 +3,244 @@
 import { useState, type ReactNode } from 'react';
 
 type Language = 'en' | 'zh';
-type PlatformItem = { title: string; status: string; href: string };
+type IconName = 'about' | 'projects' | 'gallery' | 'tools' | 'github' | 'twitter' | 'xiaohongshu';
+
+type NavItem = {
+  key: IconName;
+  href: string;
+  label: string;
+  hint: string;
+  external?: boolean;
+};
 
 const copy = {
   en: {
-    nav: { works: 'Works', library: 'Library', tools: 'Tools', support: 'Support', languageButton: '中文' },
+    languageButton: '中文',
     hero: {
       eyebrow: 'Personal visual AI project space',
       title: 'ImgDrift',
-      subtitle: 'A personal visual AI project space for image generation, generation logic, and future image tools.',
-      description: 'I use this site to collect image experiments, organize visual materials, and document how ideas move from prompts to finished visuals.',
-      primaryCta: 'Explore Works',
-      secondaryCta: 'View Future Tools',
-      tags: ['Image Generation', 'Generation Logic', 'Visual Library', 'AI Tools Coming Soon'],
+      subtitle: 'AI workflow, product thinking, and visual experiments.',
+      description: 'A quiet homepage for selected image experiments, project notes, and lightweight tools.',
     },
-    index: {
-      title: 'Project Index',
-      description: 'A simple map of what ImgDrift is collecting, showing, and planning next.',
-      cards: [
-        { title: 'Works', body: 'Image-related tasks, generated visuals, and project process notes.', href: '#works' },
-        { title: 'Visual Library', body: 'A reserved space for collected references, generated images, and visual materials.', href: '#library' },
-        { title: 'Future Tools', body: 'Planned AI image tools including upscale, background remover, and text-to-image.', href: '#tools' },
-      ],
-    },
-    platforms: {
-      title: 'Platforms',
-      description: 'Current and future places where I share projects, notes, and visual experiments.',
-      items: [
-        { title: 'GitHub', status: 'Available', href: 'https://github.com/ops-imok' },
-        { title: 'Xiaohongshu', status: 'Coming Soon', href: '' },
-        { title: 'Bilibili', status: 'Coming Soon', href: '' },
-      ],
-    },
-    works: {
-      kicker: '# works',
-      title: 'Works Preview',
-      description: 'A reserved space for image generation results, visual content ideas, and generation logic demos.',
-      items: [
-        { title: 'Product & Poster Visuals', body: 'Product images, posters, covers, and visual assets built around concrete use cases.', status: 'Placeholder' },
-        { title: 'Visual Content Creation', body: 'Infographics, social covers, content cards, and image-based storytelling formats.', status: 'Draft' },
-        { title: 'Generation Logic Demos', body: 'How rough ideas move into prompt structures, visual constraints, iterations, and final outputs.', status: 'Placeholder' },
-        { title: 'Visual Experiments', body: 'Style, composition, texture, and visual direction experiments beyond commercial use cases.', status: 'Coming Soon' },
-      ],
-    },
-    library: {
-      kicker: '# library',
-      title: 'Visual Library',
-      description: 'A reserved library for references, generated images, product materials, and style experiments.',
-      items: [
-        { title: 'Reference Images', body: 'Collected visual references for future prompt and design experiments.', status: '0 items / Placeholder' },
-        { title: 'Generated Images', body: 'AI-generated outputs that can be organized by direction and use case.', status: '0 items / Placeholder' },
-        { title: 'Product Materials', body: 'Product-related images, visual elements, and layout materials.', status: '0 items / Placeholder' },
-        { title: 'Style Experiments', body: 'Explorations of visual styles, composition, and image generation constraints.', status: '0 items / Placeholder' },
-      ],
-    },
-    tools: {
-      kicker: '# tools',
-      title: 'Future Image Tools',
-      description: 'Planned lightweight AI image tools. These features are not enabled in v0.0.1, but API slots are reserved for future integration.',
-      items: [
-        { title: 'Image Upscale', body: 'Improve image resolution and clarity through a future API integration.', status: ['Coming Soon', 'API Slot Reserved'] },
-        { title: 'Background Remover', body: 'Remove image backgrounds for product visuals and content assets.', status: ['Coming Soon', 'API Slot Reserved'] },
-        { title: 'Text to Image', body: 'Generate images from selected prompt templates and constrained visual directions, not a blank prompt box.', status: ['Coming Soon', 'Prompt Templates Planned'] },
-      ],
-      sketch: {
-        title: 'Sketch Prototype',
-        body: 'A browser-based sketch effect from the original prototype. It is kept as a lightweight experiment, not the core product.',
-        status: ['Prototype', 'Not enabled in v0.0.1'],
+    nav: [
+      { key: 'about', href: '#about', label: 'About', hint: 'Profile and experience' },
+      { key: 'projects', href: '#projects', label: 'Projects', hint: 'Selected builds and workflows' },
+      { key: 'gallery', href: '#gallery', label: 'Gallery', hint: 'Visual materials and image studies' },
+      { key: 'tools', href: '#tools', label: 'Tools', hint: 'Small image utilities' },
+    ] as readonly NavItem[],
+    sections: {
+      about: {
+        kicker: 'About',
+        title: 'Product thinking meets AI workflows.',
+        body: 'This space will hold my resume, product analysis experience, AI workflow practice, and the way I turn rough ideas into useful visual outputs.',
+        points: ['Resume and experience', 'Product research', 'AI-assisted workflow'],
+      },
+      projects: {
+        kicker: 'Projects',
+        title: 'Selected projects, not a crowded workstation.',
+        body: 'Projects will collect the background remover, ImgDrift homepage, OpenClaw automation, and other small but complete experiments.',
+        points: ['Background Remover', 'ImgDrift Homepage', 'OpenClaw Workflow'],
+      },
+      gallery: {
+        kicker: 'Gallery',
+        title: 'A visual shelf for images and references.',
+        body: 'Gallery will organize previous subjects, generated visuals, product-style images, and reference materials into a lighter image-first layout.',
+        points: ['Generated images', 'Product visuals', 'Reference boards'],
+      },
+      tools: {
+        kicker: 'Tools',
+        title: 'Tools stay secondary until they are ready.',
+        body: 'Image tools such as background removal will live here first. They should support the homepage instead of turning the homepage into a tool panel.',
+        points: ['Background remover', 'Image cleanup', 'Future API tools'],
       },
     },
-    support: { kicker: '# support', title: 'Support ImgDrift', description: 'If you like this visual AI project, you can support future experiments.', placeholder: 'Donation QR Placeholder' },
-    footer: { text: 'ImgDrift — A personal visual AI project space.', version: 'Version v0.0.1 · GitHub' },
+    social: [
+      { key: 'github', href: 'https://github.com/ops-imok', label: 'GitHub', hint: 'Code and repositories', external: true },
+      { key: 'twitter', href: '#', label: 'Twitter', hint: 'Social link placeholder', external: false },
+      { key: 'xiaohongshu', href: '#', label: 'Xiaohongshu', hint: 'Social link placeholder', external: false },
+    ] as readonly NavItem[],
   },
   zh: {
-    nav: { works: '作品', library: '素材库', tools: '工具', support: '支持', languageButton: 'EN' },
+    languageButton: 'EN',
     hero: {
       eyebrow: '个人视觉 AI 项目空间',
       title: 'ImgDrift',
-      subtitle: '一个围绕 AI 图像生成、生成逻辑和未来图片工具搭建的个人视觉项目空间。',
-      description: '我会在这里整理图像实验、视觉素材，以及从想法到最终成图的完整过程。',
-      primaryCta: '查看作品',
-      secondaryCta: '查看未来工具',
-      tags: ['图像生成', '生成逻辑', '视觉素材库', 'AI 工具规划中'],
+      subtitle: 'AI 工作流、产品思考与视觉实验。',
+      description: '一个更安静的个人主页，用来承接精选图像实验、项目记录和轻量工具。',
     },
-    index: {
-      title: '项目索引',
-      description: '快速了解 ImgDrift 正在收集、展示和规划的内容。',
-      cards: [
-        { title: '作品与项目', body: '图像相关任务、生成结果和项目流程记录。', href: '#works' },
-        { title: '视觉素材库', body: '用于沉淀参考图、生成图和视觉素材的预留空间。', href: '#library' },
-        { title: '未来工具', body: '规划中的 AI 图片工具，包括高清化、背景移除和文生图。', href: '#tools' },
-      ],
-    },
-    platforms: {
-      title: '平台链接',
-      description: '当前和未来用于发布项目、笔记与图像实验的平台入口。',
-      items: [
-        { title: 'GitHub', status: '已开放', href: 'https://github.com/ops-imok' },
-        { title: '小红书', status: '即将补充', href: '' },
-        { title: 'B站', status: '即将补充', href: '' },
-      ],
-    },
-    works: {
-      kicker: '# works',
-      title: '作品预览',
-      description: '用于展示图片生成结果、图文内容创作和生成逻辑 Demo 的预留空间。',
-      items: [
-        { title: '产品与海报视觉', body: '围绕具体使用场景生成的产品图、海报、封面和视觉素材。', status: '占位' },
-        { title: '图文内容创作', body: '信息图、社媒封面、内容卡片和图像化表达形式。', status: '草稿' },
-        { title: '生成逻辑 Demo', body: '展示粗略想法如何进入提示词结构、视觉约束、迭代和最终成图。', status: '占位' },
-        { title: '视觉实验', body: '商业用途之外的风格、构图、材质和视觉方向实验。', status: '规划中' },
-      ],
-    },
-    library: {
-      kicker: '# library',
-      title: '视觉素材库',
-      description: '用于沉淀参考图、生成图、产品素材和风格实验的预留素材库。',
-      items: [
-        { title: '参考图片', body: '用于后续提示词和设计实验的视觉参考。', status: '0 项 / 占位' },
-        { title: '生成图片', body: '按方向和使用场景整理的 AI 生成结果。', status: '0 项 / 占位' },
-        { title: '产品素材', body: '产品相关图片、视觉元素和版式素材。', status: '0 项 / 占位' },
-        { title: '风格实验', body: '围绕视觉风格、构图和图片生成约束的实验。', status: '0 项 / 占位' },
-      ],
-    },
-    tools: {
-      kicker: '# tools',
-      title: '未来图片工具',
-      description: '规划中的轻量 AI 图片工具。v0.0.1 暂不开放实际功能，但会为后续 API 接入预留位置。',
-      items: [
-        { title: '图片高清化', body: '未来通过 API 接入提升图片清晰度与分辨率。', status: ['规划中', 'API 接口预留'] },
-        { title: '图片背景移除', body: '用于产品图和内容素材的背景移除能力。', status: ['规划中', 'API 接口预留'] },
-        { title: '文生图', body: '基于预设提示词结构和选定视觉方向生成图片，而不是完全开放的空白输入框。', status: ['规划中', '提示词模板预留'] },
-      ],
-      sketch: {
-        title: '简笔画原型',
-        body: '来自原型项目的浏览器本地简笔画效果。它会作为轻量实验保留，但不是当前核心产品。',
-        status: ['原型', 'v0.0.1 暂不开放'],
+    nav: [
+      { key: 'about', href: '#about', label: 'About', hint: '个人经历与简历' },
+      { key: 'projects', href: '#projects', label: 'Projects', hint: '项目与工作流' },
+      { key: 'gallery', href: '#gallery', label: 'Gallery', hint: '图片素材与视觉实验' },
+      { key: 'tools', href: '#tools', label: 'Tools', hint: '轻量图片工具' },
+    ] as readonly NavItem[],
+    sections: {
+      about: {
+        kicker: 'About',
+        title: '产品思考与 AI 工作流的交叉点。',
+        body: '这里后续会放我的简历经历、产品分析经验、AI 工作流实践，以及把粗略想法变成可用视觉输出的过程。',
+        points: ['简历经历', '产品研究', 'AI 辅助工作流'],
+      },
+      projects: {
+        kicker: 'Projects',
+        title: '展示精选项目，而不是堆满功能入口。',
+        body: '项目页会承接背景移除工具、ImgDrift 主页、OpenClaw 自动化和其他小而完整的实验。',
+        points: ['背景移除工具', 'ImgDrift 主页', 'OpenClaw 工作流'],
+      },
+      gallery: {
+        kicker: 'Gallery',
+        title: '用于存放图片与参考的视觉架子。',
+        body: 'Gallery 会整理以前的主体图、生成图、产品风格图片和参考素材，让页面更偏图像展示。',
+        points: ['生成图片', '产品视觉', '参考图板'],
+      },
+      tools: {
+        kicker: 'Tools',
+        title: '工具先放在二级位置，成熟后再放大。',
+        body: '背景移除等图片工具先放在这里。它们应该支撑主页，而不是让首页变成工具面板。',
+        points: ['背景移除', '图片清理', '未来 API 工具'],
       },
     },
-    support: { kicker: '# support', title: '支持 ImgDrift', description: '如果你喜欢这个视觉 AI 项目，可以支持它后续继续实验。', placeholder: '打赏二维码占位' },
-    footer: { text: 'ImgDrift — 个人视觉 AI 项目空间。', version: '版本 v0.0.1 · GitHub' },
+    social: [
+      { key: 'github', href: 'https://github.com/ops-imok', label: 'GitHub', hint: '代码与仓库', external: true },
+      { key: 'twitter', href: '#', label: 'Twitter', hint: '社交链接占位', external: false },
+      { key: 'xiaohongshu', href: '#', label: '小红书', hint: '社交链接占位', external: false },
+    ] as readonly NavItem[],
   },
 } as const;
 
-function StatusPill({ children }: { children: ReactNode }) {
-  return <span className="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-600">{children}</span>;
-}
+function Icon({ name }: { name: IconName }) {
+  const common = 'h-5 w-5';
 
-function VisualPlaceholder({ variant = 0 }: { variant?: number }) {
-  const gradients = [
-    'from-indigo-100 via-slate-100 to-cyan-100',
-    'from-amber-100 via-stone-100 to-rose-100',
-    'from-emerald-100 via-slate-100 to-blue-100',
-    'from-violet-100 via-slate-100 to-fuchsia-100',
-  ];
+  if (name === 'about') {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={common} aria-hidden="true">
+        <circle cx="12" cy="8" r="3.5" />
+        <path d="M5 20c1.4-4 4-6 7-6s5.6 2 7 6" />
+      </svg>
+    );
+  }
+
+  if (name === 'projects') {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={common} aria-hidden="true">
+        <path d="M3.5 7.5h6l2 2h9v9a2 2 0 0 1-2 2h-15z" />
+        <path d="M3.5 7.5v-2h5.2l1.8 2" />
+      </svg>
+    );
+  }
+
+  if (name === 'gallery') {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={common} aria-hidden="true">
+        <rect x="4" y="5" width="16" height="14" rx="2" />
+        <circle cx="9" cy="10" r="1.5" />
+        <path d="M6.5 17 11 12.5l3 3 2-2 1.5 1.5" />
+      </svg>
+    );
+  }
+
+  if (name === 'tools') {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={common} aria-hidden="true">
+        <path d="m14.5 5 4.5 4.5-9.5 9.5H5v-4.5z" />
+        <path d="m13 6.5 4.5 4.5" />
+        <path d="M5 19h14" />
+      </svg>
+    );
+  }
+
+  if (name === 'github') {
+    return (
+      <svg viewBox="0 0 24 24" fill="currentColor" className={common} aria-hidden="true">
+        <path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.52 2.87 8.35 6.84 9.7.5.1.68-.22.68-.5v-1.9c-2.78.62-3.37-1.22-3.37-1.22-.45-1.2-1.12-1.52-1.12-1.52-.92-.64.07-.63.07-.63 1.02.07 1.56 1.08 1.56 1.08.9 1.59 2.37 1.13 2.95.86.09-.67.35-1.13.64-1.39-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.04-2.75-.1-.26-.45-1.3.1-2.72 0 0 .85-.28 2.78 1.05A9.37 9.37 0 0 1 12 6.9c.86 0 1.72.12 2.53.35 1.93-1.33 2.77-1.05 2.77-1.05.56 1.42.21 2.46.11 2.72.65.72 1.04 1.63 1.04 2.75 0 3.93-2.34 4.79-4.57 5.05.36.32.68.94.68 1.9v2.83c0 .28.18.6.69.5A10.13 10.13 0 0 0 22 12.25C22 6.58 17.52 2 12 2Z" />
+      </svg>
+    );
+  }
+
+  if (name === 'twitter') {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={common} aria-hidden="true">
+        <path d="M4 4l16 16" />
+        <path d="M20 4 4 20" />
+      </svg>
+    );
+  }
 
   return (
-    <div className={`relative h-40 overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br ${gradients[variant % gradients.length]}`}>
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,.5)_1px,transparent_1px),linear-gradient(0deg,rgba(255,255,255,.5)_1px,transparent_1px)] bg-[size:24px_24px]" />
-      <div className="absolute left-5 top-5 h-16 w-16 rounded-full bg-white/60 blur-sm" />
-      <div className="absolute bottom-5 right-5 h-20 w-28 rounded-2xl bg-white/55 shadow-sm" />
-      <div className="absolute bottom-8 left-7 h-2 w-24 rounded-full bg-slate-400/30" />
-      <div className="absolute bottom-12 left-7 h-2 w-14 rounded-full bg-slate-400/20" />
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={common} aria-hidden="true">
+      <rect x="5" y="5" width="14" height="14" rx="4" />
+      <path d="M8.5 12h7" />
+      <path d="M12 8.5v7" />
+    </svg>
+  );
+}
+
+function TooltipLink({ item, compact = false }: { item: NavItem; compact?: boolean }) {
+  const linkProps = item.external ? { target: '_blank', rel: 'noreferrer' } : {};
+
+  return (
+    <a
+      href={item.href}
+      aria-label={item.label}
+      title={item.label}
+      {...linkProps}
+      className={`group relative inline-flex items-center justify-center rounded-full border border-slate-200 bg-white/80 text-slate-700 shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:border-slate-400 hover:bg-white hover:text-slate-950 hover:shadow-md ${compact ? 'h-9 w-9' : 'h-12 w-12'}`}
+    >
+      <Icon name={item.key} />
+      <span className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-3 hidden -translate-x-1/2 whitespace-nowrap rounded-full border border-slate-200 bg-slate-950 px-3 py-1.5 text-xs font-medium text-white opacity-0 shadow-lg transition group-hover:block group-hover:opacity-100 md:block md:opacity-0 md:group-hover:opacity-100">
+        {item.label}
+        <span className="ml-2 text-slate-300">{item.hint}</span>
+      </span>
+    </a>
+  );
+}
+
+function SoftPanel({ children, id }: { children: ReactNode; id: string }) {
+  return (
+    <section id={id} className="mx-auto max-w-6xl scroll-mt-24 px-5 py-12 md:px-8">
+      <div className="rounded-[2rem] border border-slate-200 bg-white/75 p-6 shadow-sm backdrop-blur md:p-8">{children}</div>
+    </section>
+  );
+}
+
+function SectionCard({ section }: { section: { kicker: string; title: string; body: string; points: readonly string[] } }) {
+  return (
+    <div className="grid gap-8 md:grid-cols-[.9fr_1.1fr] md:items-end">
+      <div>
+        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">{section.kicker}</p>
+        <h2 className="mt-4 max-w-2xl text-3xl font-semibold tracking-tight text-slate-950 md:text-5xl">{section.title}</h2>
+      </div>
+      <div>
+        <p className="text-sm leading-7 text-slate-600 md:text-base">{section.body}</p>
+        <div className="mt-6 flex flex-wrap gap-2">
+          {section.points.map((point) => (
+            <span key={point} className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-500">
+              {point}
+            </span>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
 
-function SectionHeading({ kicker, title, description }: { kicker: string; title: string; description: string }) {
+function VisualStack() {
   return (
-    <div>
-      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">{kicker}</p>
-      <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 md:text-4xl">{title}</h2>
-      <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600 md:text-base">{description}</p>
+    <div className="relative mx-auto h-[320px] max-w-sm md:h-[390px]">
+      <div className="absolute left-2 top-8 h-56 w-56 rounded-[3rem] border border-slate-200 bg-gradient-to-br from-indigo-100 via-white to-cyan-100 shadow-sm" />
+      <div className="absolute right-0 top-0 h-48 w-36 rounded-[2.5rem] border border-slate-200 bg-white/80 p-3 shadow-sm">
+        <div className="h-full rounded-[2rem] bg-gradient-to-b from-slate-100 to-slate-200" />
+      </div>
+      <div className="absolute bottom-0 left-14 h-48 w-64 rounded-[2.5rem] border border-slate-200 bg-white p-4 shadow-sm">
+        <div className="grid h-full grid-cols-3 gap-2">
+          <div className="rounded-2xl bg-slate-100" />
+          <div className="rounded-2xl bg-slate-200/80" />
+          <div className="rounded-2xl bg-slate-100" />
+          <div className="rounded-2xl bg-slate-200/70" />
+          <div className="rounded-2xl bg-slate-100" />
+          <div className="rounded-2xl bg-slate-200/80" />
+        </div>
+      </div>
     </div>
   );
 }
@@ -182,85 +248,73 @@ function SectionHeading({ kicker, title, description }: { kicker: string; title:
 export default function Home() {
   const [language, setLanguage] = useState<Language>('en');
   const t = copy[language];
-  const platformItems = t.platforms.items as readonly PlatformItem[];
 
   return (
-    <main className="min-h-screen bg-[#f7f7f5] text-slate-950">
-      <header className="sticky top-0 z-30 border-b border-slate-200/70 bg-[#f7f7f5]/90 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 md:px-8">
-          <a href="#top" className="text-sm font-semibold tracking-tight text-slate-950 hover:underline underline-offset-4">ImgDrift</a>
-          <nav className="flex items-center gap-3 text-sm text-slate-600 md:gap-5">
-            <a href="#works" className="hidden hover:text-slate-950 hover:underline underline-offset-4 sm:inline">{t.nav.works}</a>
-            <a href="#library" className="hidden hover:text-slate-950 hover:underline underline-offset-4 sm:inline">{t.nav.library}</a>
-            <a href="#tools" className="hover:text-slate-950 hover:underline underline-offset-4">{t.nav.tools}</a>
-            <a href="#support" className="hover:text-slate-950 hover:underline underline-offset-4">{t.nav.support}</a>
-            <button type="button" onClick={() => setLanguage((current) => (current === 'en' ? 'zh' : 'en'))} className="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 shadow-sm transition hover:border-slate-500 hover:text-slate-950">{t.nav.languageButton}</button>
-          </nav>
+    <main className="min-h-screen overflow-hidden bg-[#f7f7f5] text-slate-950">
+      <header className="fixed left-0 right-0 top-0 z-30 px-5 py-5 md:px-8">
+        <div className="mx-auto flex max-w-6xl items-center justify-between">
+          <a href="#top" className="rounded-full border border-slate-200 bg-white/80 px-4 py-2 text-sm font-semibold tracking-tight text-slate-950 shadow-sm backdrop-blur transition hover:border-slate-400">
+            ImgDrift
+          </a>
+          <div className="flex items-center gap-2">
+            <nav className="flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 p-1.5 shadow-sm backdrop-blur">
+              {t.nav.map((item) => (
+                <TooltipLink key={item.key} item={item} />
+              ))}
+            </nav>
+            <button
+              type="button"
+              onClick={() => setLanguage((current) => (current === 'en' ? 'zh' : 'en'))}
+              className="h-12 rounded-full border border-slate-200 bg-white/80 px-4 text-xs font-semibold text-slate-600 shadow-sm backdrop-blur transition hover:border-slate-400 hover:text-slate-950"
+            >
+              {t.languageButton}
+            </button>
+          </div>
         </div>
       </header>
 
-      <section id="top" className="mx-auto max-w-6xl px-5 pb-16 pt-16 md:px-8 md:pb-24 md:pt-24">
-        <div className="grid gap-10 lg:grid-cols-[1.1fr_.9fr] lg:items-center">
-          <div>
-            <p className="mb-4 inline-flex rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-slate-500">{t.hero.eyebrow}</p>
-            <h1 className="text-5xl font-semibold tracking-tight text-slate-950 md:text-7xl">{t.hero.title}</h1>
-            <p className="mt-6 max-w-2xl text-2xl font-medium leading-tight text-slate-800 md:text-3xl">{t.hero.subtitle}</p>
-            <p className="mt-5 max-w-2xl text-base leading-8 text-slate-600 md:text-lg">{t.hero.description}</p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <a href="#works" className="rounded-full bg-slate-950 px-5 py-3 text-sm font-medium text-white transition hover:-translate-y-0.5 hover:bg-slate-800">{t.hero.primaryCta}</a>
-              <a href="#tools" className="rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-medium text-slate-800 transition hover:-translate-y-0.5 hover:border-slate-500">{t.hero.secondaryCta}</a>
-            </div>
-            <div className="mt-8 flex flex-wrap gap-2">{t.hero.tags.map((tag) => <StatusPill key={tag}>{tag}</StatusPill>)}</div>
-          </div>
-          <div className="rounded-[2rem] border border-slate-200 bg-white p-4 shadow-sm">
-            <div className="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4">
-              <VisualPlaceholder variant={0} />
-              <div className="mt-4 grid grid-cols-3 gap-3"><div className="h-20 rounded-2xl border border-slate-200 bg-white" /><div className="h-20 rounded-2xl border border-slate-200 bg-white" /><div className="h-20 rounded-2xl border border-slate-200 bg-white" /></div>
-            </div>
+      <div className="pointer-events-none fixed bottom-5 left-5 z-30 flex gap-2 md:bottom-7 md:left-7">
+        <div className="pointer-events-auto flex gap-2 rounded-full border border-slate-200 bg-white/65 p-1.5 shadow-sm backdrop-blur">
+          {t.social.map((item) => (
+            <TooltipLink key={item.key} item={item} compact />
+          ))}
+        </div>
+      </div>
+
+      <section id="top" className="mx-auto grid min-h-screen max-w-6xl items-center gap-10 px-5 pb-24 pt-32 md:grid-cols-[1.05fr_.95fr] md:px-8 md:pt-28">
+        <div>
+          <p className="mb-5 inline-flex rounded-full border border-slate-200 bg-white/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 shadow-sm backdrop-blur">{t.hero.eyebrow}</p>
+          <h1 className="text-6xl font-semibold tracking-tight text-slate-950 md:text-8xl">{t.hero.title}</h1>
+          <p className="mt-7 max-w-2xl text-2xl font-medium leading-tight text-slate-800 md:text-4xl">{t.hero.subtitle}</p>
+          <p className="mt-6 max-w-xl text-sm leading-7 text-slate-500 md:text-base">{t.hero.description}</p>
+          <div className="mt-9 flex gap-3">
+            {t.nav.map((item) => (
+              <TooltipLink key={item.key} item={item} />
+            ))}
           </div>
         </div>
+        <VisualStack />
       </section>
 
-      <section className="mx-auto max-w-6xl px-5 py-8 md:px-8">
-        <h2 className="text-2xl font-semibold tracking-tight text-slate-950">{t.index.title}</h2>
-        <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">{t.index.description}</p>
-        <div className="mt-5 grid gap-4 md:grid-cols-3">{t.index.cards.map((card) => <a key={card.title} href={card.href} className="group rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-slate-400 hover:shadow-md"><h3 className="text-lg font-semibold text-slate-950 group-hover:underline underline-offset-4">{card.title} →</h3><p className="mt-3 text-sm leading-6 text-slate-600">{card.body}</p></a>)}</div>
-      </section>
+      <SoftPanel id="about">
+        <SectionCard section={t.sections.about} />
+      </SoftPanel>
 
-      <section className="mx-auto max-w-6xl px-5 py-8 md:px-8">
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-          <h2 className="text-2xl font-semibold tracking-tight text-slate-950">{t.platforms.title}</h2>
-          <p className="mt-2 text-sm leading-6 text-slate-600">{t.platforms.description}</p>
-          <div className="mt-5 grid gap-3 md:grid-cols-3">
-            {platformItems.map((item) => {
-              const content = <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-slate-400"><div className="flex items-center justify-between gap-3"><span className="font-medium text-slate-900">{item.title}</span><StatusPill>{item.status}</StatusPill></div></div>;
-              return item.href ? <a key={item.title} href={item.href} target="_blank" rel="noreferrer" className="group">{content}</a> : <div key={item.title}>{content}</div>;
-            })}
-          </div>
-        </div>
-      </section>
+      <SoftPanel id="projects">
+        <SectionCard section={t.sections.projects} />
+      </SoftPanel>
 
-      <section id="works" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-12 md:px-8">
-        <SectionHeading kicker={t.works.kicker} title={t.works.title} description={t.works.description} />
-        <div className="mt-8 grid gap-5 md:grid-cols-2">{t.works.items.map((item, index) => <article key={item.title} className="group rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-slate-400 hover:shadow-md"><VisualPlaceholder variant={index} /><div className="mt-5 flex items-start justify-between gap-4"><h3 className="text-lg font-semibold text-slate-950 group-hover:underline underline-offset-4">{item.title} →</h3><StatusPill>{item.status}</StatusPill></div><p className="mt-3 text-sm leading-6 text-slate-600">{item.body}</p></article>)}</div>
-      </section>
+      <SoftPanel id="gallery">
+        <SectionCard section={t.sections.gallery} />
+      </SoftPanel>
 
-      <section id="library" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-12 md:px-8">
-        <SectionHeading kicker={t.library.kicker} title={t.library.title} description={t.library.description} />
-        <div className="mt-8 grid gap-4 md:grid-cols-4">{t.library.items.map((item, index) => <article key={item.title} className="group rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-slate-400"><div className="mb-5 grid grid-cols-3 gap-2"><div className="h-12 rounded-xl bg-slate-100" /><div className="h-12 rounded-xl bg-slate-200/80" /><div className="h-12 rounded-xl bg-slate-100" /><div className="h-12 rounded-xl bg-slate-200/70" /><div className="h-12 rounded-xl bg-slate-100" /><div className="h-12 rounded-xl bg-slate-200/80" /></div><h3 className="font-semibold text-slate-950 group-hover:underline underline-offset-4">{item.title} #{index + 1}</h3><p className="mt-3 text-sm leading-6 text-slate-600">{item.body}</p><div className="mt-4"><StatusPill>{item.status}</StatusPill></div></article>)}</div>
-      </section>
+      <SoftPanel id="tools">
+        <SectionCard section={t.sections.tools} />
+      </SoftPanel>
 
-      <section id="tools" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-12 md:px-8">
-        <SectionHeading kicker={t.tools.kicker} title={t.tools.title} description={t.tools.description} />
-        <div className="mt-8 grid gap-5 md:grid-cols-3">{t.tools.items.map((item) => <article key={item.title} className="group rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-slate-400 hover:shadow-md"><div className="mb-5 h-12 w-12 rounded-2xl border border-slate-200 bg-slate-50" /><h3 className="text-lg font-semibold text-slate-950 group-hover:underline underline-offset-4">{item.title} →</h3><p className="mt-3 text-sm leading-6 text-slate-600">{item.body}</p><div className="mt-5 flex flex-wrap gap-2">{item.status.map((status) => <StatusPill key={status}>{status}</StatusPill>)}</div></article>)}</div>
-        <div className="mt-5 rounded-3xl border border-dashed border-slate-300 bg-white/70 p-6"><div className="flex flex-col justify-between gap-4 md:flex-row md:items-center"><div><h3 className="text-lg font-semibold text-slate-950">{t.tools.sketch.title}</h3><p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">{t.tools.sketch.body}</p></div><div className="flex flex-wrap gap-2">{t.tools.sketch.status.map((status) => <StatusPill key={status}>{status}</StatusPill>)}</div></div></div>
-      </section>
-
-      <section id="support" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-12 md:px-8">
-        <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8"><SectionHeading kicker={t.support.kicker} title={t.support.title} description={t.support.description} /><div className="mt-8 flex min-h-40 items-center justify-center rounded-3xl border border-dashed border-slate-300 bg-slate-50 text-sm font-medium text-slate-500">{t.support.placeholder}</div></div>
-      </section>
-
-      <footer className="mx-auto max-w-6xl px-5 py-10 md:px-8"><div className="flex flex-col justify-between gap-3 border-t border-slate-200 pt-6 text-sm text-slate-500 md:flex-row md:items-center"><p>{t.footer.text}</p><a href="https://github.com/ops-imok" target="_blank" rel="noreferrer" className="hover:text-slate-950 hover:underline underline-offset-4">{t.footer.version}</a></div></footer>
+      <footer className="mx-auto max-w-6xl px-5 pb-12 pt-8 md:px-8">
+        <div className="border-t border-slate-200 pt-6 text-sm text-slate-400">ImgDrift · v0.0.1 visual homepage test</div>
+      </footer>
     </main>
   );
 }
