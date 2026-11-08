@@ -4,14 +4,10 @@ import { useState } from 'react';
 import Piaopiao from './piaopiao';
 import styles from './home.module.css';
 
-const sketchSource = 'https://github.com/ops-imok/instant-style/blob/old-package/src/app/page.tsx';
 const copy = {
   en: {
     intro: 'A small studio for image-making, experiments, and tools.',
-    featured: 'Featured experiment',
-    sketch: 'Sketch Prototype',
-    sketchDescription: 'An early browser experiment that turns photos into line drawings.',
-    sketchLink: 'View prototype source',
+    history: 'Version History',
     indexLabel: 'Studio index',
     sections: [
       { id: 'works', title: 'Works', description: 'Selected image projects.', notes: ['Product and poster visuals', 'Visual storytelling and process notes'] },
@@ -22,10 +18,7 @@ const copy = {
   },
   zh: {
     intro: '一个记录图像创作、视觉实验和小工具的个人工作室。',
-    featured: '精选实验',
-    sketch: '简笔画原型',
-    sketchDescription: '一个把照片转换成线稿的早期浏览器实验。',
-    sketchLink: '查看原型源码',
+    history: '版本记录',
     indexLabel: '工作室目录',
     sections: [
       { id: 'works', title: '作品', description: '精选图像项目。', notes: ['产品图与海报视觉', '图像叙事与创作过程'] },
@@ -35,6 +28,31 @@ const copy = {
     mascot: { jump: '让漂漂跳一下', secret: '漂漂的隐藏菜单', replay: '再跑一次', close: '收起' },
   },
 };
+
+const versionHistory = [
+  {
+    id: '01',
+    date: '2026-11-09',
+    en: {
+      title: 'Version 01 · The new homepage',
+      dateLabel: 'Nov 9, 2026',
+      changes: [
+        'Introduced a single-column layout with a warm paper palette.',
+        'Made English the default, with a Chinese language switch.',
+        'Added Piaopiao, a paper companion that sways on hover and jumps on click.',
+      ],
+    },
+    zh: {
+      title: '第 01 版 · 新版首页',
+      dateLabel: '2026 年 11 月 9 日',
+      changes: [
+        '采用暖白纸色和单栏排版。',
+        '默认显示英文，可切换到中文。',
+        '加入小相纸漂漂，悬停时轻晃，点击时跳起来。',
+      ],
+    },
+  },
+];
 
 export default function Home() {
   const [language, setLanguage] = useState<'en' | 'zh'>('en');
@@ -59,14 +77,20 @@ export default function Home() {
             <p>{t.intro}</p>
           </section>
 
-          <section className={styles.featured} aria-labelledby="featured-title">
-            <div>
-              <p className={styles.eyebrow}>{t.featured}</p>
-              <h2 id="featured-title">{t.sketch}</h2>
-              <p>{t.sketchDescription}</p>
-              <a href={sketchSource}>{t.sketchLink} <span aria-hidden="true">↗</span></a>
-            </div>
-            <div className={styles.sketch} aria-hidden="true" />
+          <section className={styles.history} aria-labelledby="version-history">
+            <h2 id="version-history" className={styles.eyebrow}>{t.history}</h2>
+            <ol className={styles.timeline}>
+              {versionHistory.map(version => {
+                const entry = version[language];
+                return (
+                  <li key={version.id} className={styles.release}>
+                    <time dateTime={version.date}>{entry.dateLabel}</time>
+                    <h3>{entry.title}</h3>
+                    <ul>{entry.changes.map(change => <li key={change}>{change}</li>)}</ul>
+                  </li>
+                );
+              })}
+            </ol>
           </section>
 
           <section aria-label={t.indexLabel}>
