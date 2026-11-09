@@ -7,7 +7,11 @@ import styles from './home.module.css';
 const copy = {
   en: {
     intro: 'A small studio for image-making, experiments, and tools.',
-    history: 'Version History',
+    about: {
+      title: 'Behind ImgDrift',
+      body: 'I use ImgDrift as my workbench for making images. I want to keep a record of what happens between the first idea and the finished image: the prompts I try, the versions I set aside, and the little tools I build along the way.',
+    },
+    history: 'Drift Notes',
     indexLabel: 'Studio index',
     sections: [
       { id: 'works', title: 'Works', description: 'Selected image projects.', notes: ['Product and poster visuals', 'Visual storytelling and process notes'] },
@@ -18,7 +22,11 @@ const copy = {
   },
   zh: {
     intro: '一个记录图像创作、视觉实验和小工具的个人工作室。',
-    history: '版本记录',
+    about: {
+      title: '关于我',
+      body: 'ImgDrift 是我的图像工作台。我想记下从第一个想法到成图的过程，包括试过的提示词、没选中的版本，以及为了把一张图做好而顺手做的小工具。',
+    },
+    history: '漂流记',
     indexLabel: '工作室目录',
     sections: [
       { id: 'works', title: '作品', description: '精选图像项目。', notes: ['产品图与海报视觉', '图像叙事与创作过程'] },
@@ -34,22 +42,14 @@ const versionHistory = [
     id: '01',
     date: '2026-11-09',
     en: {
-      title: 'Version 01 · The new homepage',
+      title: 'The Birth of Piaopiao',
       dateLabel: 'Nov 9, 2026',
-      changes: [
-        'Introduced a single-column layout with a warm paper palette.',
-        'Made English the default, with a Chinese language switch.',
-        'Added Piaopiao, a paper companion that sways on hover and jumps on click.',
-      ],
+      story: 'Piaopiao began as a sketch of a little piece of photo paper with a curled corner. Now it lives at the top of ImgDrift. Move your pointer close and it leans toward you. Tap it and it hops up to say hello.',
     },
     zh: {
-      title: '第 01 版 · 新版首页',
+      title: '漂漂诞生了',
       dateLabel: '2026 年 11 月 9 日',
-      changes: [
-        '采用暖白纸色和单栏排版。',
-        '默认显示英文，可切换到中文。',
-        '加入小相纸漂漂，悬停时轻晃，点击时跳起来。',
-      ],
+      story: '漂漂最初是草稿里一张卷了角的小相纸。现在它住在 ImgDrift 的页首。鼠标靠近，它就轻轻歪一下身子。点它一下，它会跳起来打个招呼。',
     },
   },
 ];
@@ -77,6 +77,11 @@ export default function Home() {
             <p>{t.intro}</p>
           </section>
 
+          <section className={styles.about} aria-labelledby="about-imgdrift">
+            <h2 id="about-imgdrift" className={styles.eyebrow}>{t.about.title}</h2>
+            <p>{t.about.body}</p>
+          </section>
+
           <section className={styles.history} aria-labelledby="version-history">
             <h2 id="version-history" className={styles.eyebrow}>{t.history}</h2>
             <ol className={styles.timeline}>
@@ -84,9 +89,12 @@ export default function Home() {
                 const entry = version[language];
                 return (
                   <li key={version.id} className={styles.release}>
-                    <time dateTime={version.date}>{entry.dateLabel}</time>
+                    <div className={styles.releaseMeta}>
+                      <span>{version.id} <span aria-hidden="true">·</span></span>
+                      <time dateTime={version.date}>{entry.dateLabel}</time>
+                    </div>
                     <h3>{entry.title}</h3>
-                    <ul>{entry.changes.map(change => <li key={change}>{change}</li>)}</ul>
+                    <p>{entry.story}</p>
                   </li>
                 );
               })}

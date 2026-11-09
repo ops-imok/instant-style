@@ -86,9 +86,20 @@
   line-height: 1.5;
 }
 
+.about,
 .history {
   padding-block: 1.8rem;
-  border-block: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+}
+
+.history { border-bottom: 1px solid var(--line); }
+
+.about p,
+.release p {
+  max-width: 56ch;
+  margin-top: .6rem;
+  color: var(--muted-ink);
+  line-height: 1.65;
 }
 
 .eyebrow {
@@ -131,20 +142,15 @@
   content: '';
 }
 
-.release time {
+.releaseMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
   color: var(--muted-ink);
   font: .78rem/1.4 system-ui, sans-serif;
 }
 
 .release h3 { margin-top: .25rem; }
-
-.release ul {
-  margin: .6rem 0 0 1.05rem;
-  color: var(--muted-ink);
-  list-style: disc;
-}
-
-.release ul li + li { margin-top: .25rem; }
 
 .indexRow {
   border-bottom: 1px solid var(--line);
