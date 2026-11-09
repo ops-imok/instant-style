@@ -9,7 +9,10 @@ const copy = {
     intro: 'A small studio for image-making, experiments, and tools.',
     about: {
       title: 'Behind ImgDrift',
-      body: 'I use ImgDrift as my workbench for making images. I want to keep a record of what happens between the first idea and the finished image: the prompts I try, the versions I set aside, and the little tools I build along the way.',
+      paragraphs: [
+        'I discovered ComfyUI in December 2025. It got me curious about making images with AI, though I didn’t get far at the time. In April 2026, I finally started making images myself. I was surprised by how real an image could look when a few words captured the right details. The inspiration and texture still felt different from images captured in real life.',
+        'I want to use images to hold on to the beautiful moments I notice in everyday life. Here on ImgDrift, I also want to share how an image comes together, what I change along the way, and what those changes do to the picture.',
+      ],
     },
     history: 'Drift Notes',
     indexLabel: 'Studio index',
@@ -24,7 +27,10 @@ const copy = {
     intro: '一个记录图像创作、视觉实验和小工具的个人工作室。',
     about: {
       title: '关于我',
-      body: 'ImgDrift 是我的图像工作台。我想记下从第一个想法到成图的过程，包括试过的提示词、没选中的版本，以及为了把一张图做好而顺手做的小工具。',
+      paragraphs: [
+        '2025 年 12 月，我第一次接触 ComfyUI，也第一次对 AI 生图产生了兴趣。那时我没能做出来。到了 2026 年 4 月，我才真正开始用 AI 做图。我发现，只要把关键细节说清楚，短短几句话就能生成一张看起来很真实的图。它的灵感和质感，和真实影像还是有差别。',
+        '我想用图像记下生活里那些让我觉得美好的时刻。我也想在 ImgDrift 慢慢讲清楚，一张图是怎么做出来的，改了哪些地方，以及每一次调整是怎么改变画面的。',
+      ],
     },
     history: '漂流记',
     indexLabel: '工作室目录',
@@ -79,7 +85,7 @@ export default function Home() {
 
           <section className={styles.about} aria-labelledby="about-imgdrift">
             <h2 id="about-imgdrift" className={styles.eyebrow}>{t.about.title}</h2>
-            <p>{t.about.body}</p>
+            {t.about.paragraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}
           </section>
 
           <section className={styles.history} aria-labelledby="version-history">
